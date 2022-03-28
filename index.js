@@ -20,15 +20,16 @@ app.listen(port, () => console.log(`Listening on port ${port}!`))
 function createRequest (input, callback) {
   const validator = new Validator(callback, input)
   const jobRunID = validator.validated.id
-  const url = 'https://api.nft-index.com/top11/'
+  const url = 'https://nft.truflation.com/indexes/top11/'
 
   Requester.request(
     { url },
     data => {
       if (
-        'currentInflationIndex' in data &&
-        'yearAgoInflationIndex' in data &&
-        'yearOverYearInflation' in data
+        'indexName' in data &&
+        'indexValue' in data &&
+        'aDayChange' in data &&
+        'aMonthChange' in data
       ) {
         return false
       }
