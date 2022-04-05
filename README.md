@@ -24,9 +24,10 @@ All contracts on Chainlink must be funded using the local utility token LINK.
 
 ## Network Details
 
-Chainlink oracle address:
-Job ID for webhook:
+Chainlink oracle address: 0x17dED59fCd940F0a40462D52AAcD11493C6D8073
+Job ID:
 
-[Short blurb on the side]
-
-NFT price indexes for the top NFT collections and collection aggregates available on-chain to incorporate into Web3 apps and portfolio management products. Personalized NFT indexes possible upon request.
+- indexName: cd7bea47b73a4d47a5cedecf00b9b561
+- indexValue: d06b539cdbeb450aa72f2e70223078af
+- aDayChange: 3d2a6108056644c38f98d755536eb5ac
+- aMonthChange: b871377caf1f4ccb851189f8d906c277
