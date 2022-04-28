@@ -65,7 +65,7 @@ All contracts on Chainlink must be funded using the local utility token LINK.
 - LINK token address: 0xb0897686c545045afc77cf20ec7a532e3120e0f1
 - Job ID(NFT Index): eb4f0d822a4c481ca88e5a3ab2fec562
 
-### Mumbai Testnet (Chain ID: 80001)
+### Mumbai (Polygon) Testnet (Chain ID: 80001)
 
 - Payment amount: 0.01 LINK
 - Oracle address: 0x17dED59fCd940F0a40462D52AAcD11493C6D8073
