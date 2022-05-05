@@ -1,72 +1,40 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const { Requester, Validator } = require('@chainlink/external-adapter')
+// Spdx-License-Identifier: MIT
+// Copyright 2022 - Laguna Labs
+//
+// This is a simple chainlab adapter that processes incoming json
+// packages and outputs json.
 
-const app = express()
-const port = process.env.EA_PORT || 8081
+/* eslint n/no-callback-literal: 0 */
 
-app.use(bodyParser.json())
+const { ApiAdapter, extractData } = require('./api_adapter')
 
-app.post('/', (req, res) => {
-  console.log('POST Data: ', req.body)
-  createRequest(req.body, (status, result) => {
-    console.log('Result: ', result)
-    res.status(status).json(result)
-  })
+const app = new ApiAdapter({
+  urlPost: {
+    'nft-index': `${process.env.NFT_INDEX_URL || "http://localhost:8080/dev-test/index-value"}`
+  },
+  urlGet: {
+    'truflation/current': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/current',
+    'truflation/at-date': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/at-date/',
+    'truflation/range': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/range/'
+  },
+  func: {
+    echo: (req, res) => {
+      console.log('POST Data: ', req.body)
+      let data = req.body.data === undefined ? {} : req.body.data
+      if (typeof data === 'string' || data instanceof String) {
+        data = JSON.parse(data)
+      }
+      const [retval, json] = extractData(
+        data, req.body.keypath, req.body.abi
+      )
+      if (json) {
+        res.json(retval)
+      } else {
+        res.write(retval)
+        res.end(undefined, 'binary')
+      }
+    }
+  }
 })
 
-app.listen(port, () => console.log(`Listening on port ${port}!`))
-
-function createRequest (input, callback) {
-  const validator = new Validator(callback, input)
-  const jobRunID = validator.validated.id
-  const url = 'https://nft.truflation.com/indexes/top11/'
-
-  Requester.request(
-    { url },
-    data => {
-      if (
-        'indexName' in data &&
-        'indexValue' in data &&
-        'aDayChange' in data &&
-        'aMonthChange' in data
-      ) {
-        return false
-      }
-      return true
-    }
-  )
-    .then(response => {
-      const value = JSON.parse(JSON.stringify(response.data))
-      response.data.result = Requester.getResult(value, [])
-      callback(response.status, Requester.success(jobRunID, response))
-    })
-    .catch(error => {
-      callback(500, Requester.errored(jobRunID, error))
-    })
-}
-
-// GCP Functions
-exports.gcpservice = (req, res) => {
-  createRequest(req.body, (statusCode, data) => {
-    res.status(statusCode).send(data)
-  })
-}
-
-// AWS Lambda
-exports.handler = (event, context, callback) => {
-  createRequest(event, (statusCode, data) => {
-    callback(null, data)
-  })
-}
-
-// newer AWS Lambda implementations
-exports.handlerv2 = (event, context, callback) => {
-  createRequest(JSON.parse(event.body), (statusCode, data) => {
-    callback(null, {
-      statusCode: statusCode,
-      body: JSON.stringify(data),
-      isBase64Encoded: false
-    })
-  })
-}
+app.listen(process.env.EA_PORT || 8081)
