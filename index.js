@@ -6,7 +6,8 @@
 
 /* eslint n/no-callback-literal: 0 */
 
-const { ApiAdapter, extractData } = require('./api_adapter')
+const { ApiAdapter, echoFunc, stub1Func } =
+      require('./api_adapter')
 
 const app = new ApiAdapter({
   urlPost: {
@@ -17,22 +18,8 @@ const app = new ApiAdapter({
     'truflation/range': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/range/'
   },
   func: {
-    echo: (req, res) => {
-      console.log('POST Data: ', req.body)
-      let data = req.body.data === undefined ? {} : req.body.data
-      if (typeof data === 'string' || data instanceof String) {
-        data = JSON.parse(data)
-      }
-      const [retval, json] = extractData(
-        data, req.body.keypath, req.body.abi
-      )
-      if (json) {
-        res.json(retval)
-      } else {
-        res.write(retval)
-        res.end(undefined, 'binary')
-      }
-    }
+    echo: echoFunc,
+    stub1: stub1Func
   }
 })
 
