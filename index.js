@@ -10,6 +10,7 @@ const { ApiAdapter, extractData } = require('./api_adapter')
 
 const app = new ApiAdapter({
   urlPost: {
+    'nft-index': `${process.env.NFT_INDEX_URL || "http://localhost:8080/dev-test/index-value"}`
   },
   urlGet: {
     'truflation/current': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/current',
@@ -36,4 +37,4 @@ const app = new ApiAdapter({
   }
 })
 
-app.listen(process.env.EA_PORT || 8082)
+app.listen(process.env.EA_PORT || 8081)
