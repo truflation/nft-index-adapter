@@ -13,9 +13,9 @@ const app = new ApiAdapter({
   urlPost: {
   },
   urlGet: {
-    'truflation/current': 'https://api.truflation.com/current',
-    'truflation/at-date': 'https://api.truflation.com/at-date',
-    'truflation/range': 'https://api.truflation.com/range'
+    'truflation/current': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/current',
+    'truflation/at-date': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/at-date/',
+    'truflation/range': 'https://virtserver.swaggerhub.com/truflation/Truflation/1.0.0/range/'
   },
   func: {
     echo: echoFunc,
